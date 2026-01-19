@@ -1,0 +1,6 @@
+.github
+
+.env
+frontend/.env
+node_modules/
+
