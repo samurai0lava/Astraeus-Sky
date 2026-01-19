@@ -43,55 +43,55 @@ help:
 # ============================================
 
 dev:
-	docker-compose up
+	docker compose up
 
 up:
-	docker-compose up -d
+	docker compose up -d
 
 down:
-	docker-compose down
+	docker compose down
 
 restart:
-	docker-compose restart
+	docker compose restart
 
 logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 logs-fe:
-	docker-compose logs -f frontend
+	docker compose logs -f frontend
 
 logs-be:
-	docker-compose logs -f backend-api
+	docker compose logs -f backend-api
 
 # ============================================
 # Individual Services
 # ============================================
 
 frontend:
-	docker-compose up frontend
+	docker compose up frontend
 
 backend:
-	docker-compose up backend-api redis
+	docker compose up backend-api redis
 
 redis:
-	docker-compose up redis -d
+	docker compose up redis -d
 
 # ============================================
 # Build
 # ============================================
 
 build:
-	docker-compose build
+	docker compose build
 
 build-prod:
 	docker build --target production -t astraeus-frontend:prod ./frontend
 	docker build --target production -t astraeus-backend:prod ./BackEnd
 
 build-fe:
-	docker-compose build frontend
+	docker compose build frontend
 
 build-be:
-	docker-compose build backend-api
+	docker compose build backend-api
 
 # ============================================
 # Installation (local development without Docker)
@@ -110,13 +110,13 @@ install-be:
 # ============================================
 
 shell-fe:
-	docker-compose exec frontend sh
+	docker compose exec frontend sh
 
 shell-be:
-	docker-compose exec backend-api sh
+	docker compose exec backend-api sh
 
 shell-redis:
-	docker-compose exec redis redis-cli
+	docker compose exec redis redis-cli
 
 # ============================================
 # Quality
@@ -136,7 +136,7 @@ test-e2e:
 # ============================================
 
 clean:
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 
 prune:
 	docker system prune -af
