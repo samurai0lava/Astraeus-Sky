@@ -1,68 +1,209 @@
+/* ===========================================
+   Astraeus Sky - Global Styles
+   =========================================== */
+
+/* Google Fonts - Crimson Text for elegant serif headings */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ===========================================
+   Design Tokens
+   =========================================== */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Colors */
+  --color-background: #000000;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  --color-accent: #8BA4C7;
+  --color-accent-light: #A3B8D4;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Earth & Atmosphere Colors */
+  --color-earth-dark: #0a1628;
+  --color-earth-mid: #1a3a5c;
+  --color-earth-glow: #3d6a9e;
+  --color-atmosphere: rgba(100, 150, 200, 0.15);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* Moon Colors */
+  --color-moon: #d4d4c4;
+  --color-moon-glow: rgba(212, 212, 196, 0.3);
+
+  /* Typography */
+  --font-serif: 'Crimson Text', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
+  --text-6xl: 4.5rem;
+  --text-7xl: 6rem;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Z-index layers */
+  --z-base: 1;
+  --z-overlay: 10;
+  --z-modal: 100;
+  --z-nav: 1000;
+
+  /* Breakpoints (for reference in JS) */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+/* ===========================================
+   CSS Reset
+   =========================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-h1 {
-  font-size: 3.2em;
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* ===========================================
+   Utility Classes
+   =========================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.text-accent {
+  color: var(--color-accent);
+}
+
+/* ===========================================
+   Animations
+   =========================================== */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
   }
-  a:hover {
-    color: #747bff;
+
+  50% {
+    transform: translateY(-10px);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: blur(20px);
+  }
+
+  50% {
+    opacity: 0.6;
+    filter: blur(30px);
+  }
+}
+
+@keyframes bounce-subtle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
