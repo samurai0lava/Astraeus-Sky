@@ -6,9 +6,6 @@ Web app using **N2YO API** as the main data source to track satellites
 
 (position, orbit, visible passes).
 
-Goal: combine satellite data with **real-world observation context**
-
-(weather, light pollution, astronomy).
 
 ---
 
@@ -16,16 +13,6 @@ Goal: combine satellite data with **real-world observation context**
 
 - **Satellite tracking**
     - N2YO API (positions, orbits, passes)
-- **Weather**
-    - OpenWeatherMap API
-    - Used for: cloud cover, visibility, forecasts
-- **Light pollution**
-    - LightPollutionMap.info
-    - World Atlas night sky brightness (map tiles)
-- **Astronomy context**
-    - From weather API:
-        - Moon phase & illumination
-        - Sun position (day / night / astronomical night)
 
 ---
 
@@ -39,7 +26,7 @@ Goal: combine satellite data with **real-world observation context**
 
 **Backend**
 
-- NestJS
+- ExpressJS
 - Aggregates data from:
     - N2YO
     - OpenWeatherMap
@@ -48,7 +35,7 @@ Goal: combine satellite data with **real-world observation context**
 **Cache**
 
 - Redis
-- Cache satellite passes + weather data to reduce API calls`
+- Cache satellite passes to reduce API calls`
 
 ---
 
