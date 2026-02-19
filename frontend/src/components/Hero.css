@@ -1,6 +1,3 @@
-/* ===========================================
-   Hero Section Styles
-   =========================================== */
 
 .hero {
     position: relative;
@@ -14,15 +11,12 @@
     padding: 0 var(--space-4xl);
 }
 
-/* ===========================================
-   Hero Content & Title
-   =========================================== */
 .hero__content {
     position: relative;
     z-index: var(--z-overlay);
     text-align: left;
     animation: fade-in 1.2s ease-out;
-    margin-top: -10vh;
+    margin-top: -8vh;
 }
 
 .hero__title {
@@ -48,9 +42,6 @@
     font-style: normal;
 }
 
-/* ===========================================
-   Crescent Moon
-   =========================================== */
 .hero__moon-container {
     position: absolute;
     top: 60%;
@@ -61,33 +52,29 @@
 
 .hero__moon {
     position: relative;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 }
 
 .hero__moon-shape {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: var(--color-moon);
-    box-shadow:
-        inset -3px -1px 4px rgba(255, 255, 220, 0.2);
+    background: var(--color-text-primary);
 }
 
 .hero__moon-shape::before {
     content: '';
     position: absolute;
     top: -10%;
-    left: 20%;
+    left: auto;
+    right: 20%;
     width: 90%;
     height: 90%;
     border-radius: 50%;
     background: var(--color-background);
 }
 
-/* ===========================================
-   Earth Curve
-   =========================================== */
 .hero__earth-container {
     position: absolute;
     bottom: 0;
@@ -108,9 +95,9 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at 50% 100%,
-            rgba(61, 106, 158, 0.4) 0%,
+            rgba(70, 124, 185, 0.4) 0%,
             transparent 70%);
-    filter: blur(40px);
+    filter: blur(30px);
 }
 
 .hero__earth-curve {
@@ -121,24 +108,29 @@
     height: 150%;
     border-radius: 50%;
     background: radial-gradient(circle at 50% 100%,
-            #1a2a40 0%,
+            #030d1b 0%,
             #05080c 60%);
-    box-shadow: 0 -20px 100px rgba(61, 106, 158, 0.3);
+    box-shadow:
+        0 -1px 0 rgba(100, 150, 200, 0.35),
+        0 -2px 12px rgba(84, 148, 221, 0.4),
+        0 -20px 100px rgba(84, 148, 221, 0.726);
 }
 
-/* ===========================================
-   Scroll Indicator
-   =========================================== */
 .hero__scroll-indicator {
     position: absolute;
-    bottom: var(--space-3xl);
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: var(--space-4xl);
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: fit-content;
     z-index: var(--z-overlay);
     background: none;
     border: none;
     cursor: pointer;
     padding: var(--space-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     animation: bounce-subtle 2s ease-in-out infinite;
     transition: opacity var(--transition-base);
 }
@@ -167,9 +159,6 @@
     border-color: var(--color-accent);
 }
 
-/* ===========================================
-   Responsive Adjustments
-   =========================================== */
 @media (max-width: 768px) {
     .hero {
         padding: 0 var(--space-xl);

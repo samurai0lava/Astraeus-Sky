@@ -25,7 +25,6 @@ const Hero = () => {
             {/* Crescent Moon */}
             <div className="hero__moon-container">
                 <div className="hero__moon">
-                    <div className="hero__moon-glow" />
                     <div className="hero__moon-shape" />
                 </div>
             </div>
