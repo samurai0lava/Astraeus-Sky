@@ -14,12 +14,16 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const fetchDashboard = useCallback(async (signal = null) => {
+    const fetchDashboard = useCallback(async (signal = null, lat = null, lng = null) => {
         setLoading(true);
         setError(null);
         try {
+            let url = DASHBOARD_API;
+            if (lat !== null && lng !== null) {
+                url += `?lat=${lat}&lng=${lng}`;
+            }
             const options = signal ? { signal } : {};
-            const res = await fetch(DASHBOARD_API, options);
+            const res = await fetch(url, options);
             if (!res.ok) throw new Error(`Failed to load: ${res.status}`);
             const json = await res.json();
             setData(json);
@@ -32,12 +36,40 @@ const Dashboard = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-        fetchDashboard(controller.signal);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    fetchDashboard(controller.signal, latitude, longitude);
+                },
+                (error) => {
+                    // If geolocation fails, fallback to default fetch
+                    fetchDashboard(controller.signal);
+                },
+                { enableHighAccuracy: true }
+            );
+        } else {
+            fetchDashboard(controller.signal);
+        }
         return () => controller.abort();
     }, [fetchDashboard]);
 
     const handleRetry = () => {
-        fetchDashboard();
+        // Retry with geolocation if available
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    fetchDashboard(null, latitude, longitude);
+                },
+                () => {
+                    fetchDashboard();
+                },
+                { enableHighAccuracy: true }
+            );
+        } else {
+            fetchDashboard();
+        }
     };
 
     const hasStats = Array.isArray(data?.stats) && data.stats.length > 0;

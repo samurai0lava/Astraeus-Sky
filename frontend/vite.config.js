@@ -10,9 +10,14 @@ export default defineConfig({
       usePolling: true, // Necessary for Hot Module Replacement on some systems
     },
     proxy: {
-      // This sends any request starting with /api to the backend container
+      // Backend (use backend-api:5000 for Docker, localhost:3001 for local dev)
       '/api': {
-        target: 'http://backend-api:5000', 
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/satellite': {
+        target: 'http://localhost:3001',
         changeOrigin: true,
         secure: false,
       },
