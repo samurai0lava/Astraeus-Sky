@@ -16,21 +16,22 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-
 app.get("/api/dashboard", async (req, res) => {
   try {
     const API_KEY = process.env.N2YO_API_KEY;
     if (!API_KEY) throw new Error("N2YO_API_KEY not set");
 
-    const lat = Number(req.query.lat) || 33.93; // default Temara
-    const lng = Number(req.query.lng) || -6.90;
+    const lat = Number(req.query.lat);
+    const lng = Number(req.query.lng);
     const alt = 0;
     const radius = 90;
     const category = 0;
-
+    if (isNaN(lat) || isNaN(lng)) {
+      return res.status(400).json({ error: "Invalid lat/lng parameters" });
+    }
     const { data } = await axios.get(
       `https://api.n2yo.com/rest/v1/satellite/above/${lat}/${lng}/${alt}/${radius}/${category}`,
-      { params: { apiKey: API_KEY } }
+      { params: { apiKey: API_KEY } },
     );
 
     const stats = [
