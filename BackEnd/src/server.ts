@@ -1,7 +1,3 @@
-/**
- * Astraeus Sky backend - Express server.
- * Aggregates N2YO (satellites), OpenWeatherMap, astronomy data.
- */
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -20,10 +16,7 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-/**
- * Dashboard route - provides stats and cards for frontend.
- * You can customize this to fetch real weather, astronomy, etc.
- */
+
 app.get("/api/dashboard", async (req, res) => {
   try {
     const API_KEY = process.env.N2YO_API_KEY;

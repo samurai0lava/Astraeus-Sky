@@ -1,9 +1,3 @@
-/**
- * Dashboard section. Fetches from GET /api/dashboard.
- * Expected response shape:
- *   { stats?: Array<{ label: string, value: string | number }>, cards?: Array<{ title: string, description?: string, ... }> }
- * Missing or empty arrays are handled (nothing or "No data" shown).
- */
 import { useState, useEffect, useCallback } from 'react';
 import './Dashboard.css';
 

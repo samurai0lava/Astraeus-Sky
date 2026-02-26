@@ -10,7 +10,6 @@ const Hero = () => {
 
     return (
         <section className="hero" aria-label="Hero section">
-            {/* Title */}
             <div className="hero__content">
                 <h1 className="hero__title">
                     <span className="hero__title-line">
@@ -22,14 +21,12 @@ const Hero = () => {
                 </h1>
             </div>
 
-            {/* Crescent Moon */}
             <div className="hero__moon-container">
                 <div className="hero__moon">
                     <div className="hero__moon-shape" />
                 </div>
             </div>
 
-            {/* Earth Curve */}
             <div className="hero__earth-container">
                 <div className="hero__earth">
                     <div className="hero__earth-atmosphere" />
@@ -37,7 +34,6 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
             <button
                 className="hero__scroll-indicator"
                 onClick={handleScrollClick}

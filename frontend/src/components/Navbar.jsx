@@ -9,14 +9,11 @@ const Navbar = () => {
     };
 
     const navLinks = [
-        { label: 'Getting Started', href: '#getting-started' },
-        { label: 'Github', href: 'https://github.com' },
-        { label: 'About', href: '#about' },
+        { label: 'Github', href: 'https://github.com/samurai0lava/Astraeus-Sky' },
     ];
 
     return (
         <nav className="navbar" role="navigation" aria-label="Main navigation">
-            {/* Desktop Links */}
             <ul className="navbar__links">
                 {navLinks.map((link) => (
                     <li key={link.label}>
@@ -27,7 +24,6 @@ const Navbar = () => {
                 ))}
             </ul>
 
-            {/* Hamburger Button (Mobile) */}
             <button
                 className={`navbar__hamburger ${isMenuOpen ? 'navbar__hamburger--open' : ''}`}
                 onClick={toggleMenu}
@@ -40,8 +36,7 @@ const Navbar = () => {
                 <span className="navbar__hamburger-line" />
             </button>
 
-            {/* Logo */}
-            <span className="navbar__logo">LOGO</span>
+            <span className="navbar__logo"><img src="/src/assets/logo.png" alt="Astraeus Sky Logo" /></span>
 
             {/* Mobile Menu */}
             <div

@@ -4,13 +4,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,         // Allows access from outside the container
-    port: 5173,         // Standard Vite port
+    host: true, 
+    port: 5173,
     watch: {
-      usePolling: true, // Necessary for Hot Module Replacement on some systems
+      usePolling: true,
     },
     proxy: {
-      // Backend (use backend-api:5000 for Docker, localhost:3001 for local dev)
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,

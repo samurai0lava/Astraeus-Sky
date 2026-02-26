@@ -1,7 +1,3 @@
-/**
- * Satellite routes - proxies to N2YO API (positions, orbits, above).
- * API key is read from env (N2YO_API_KEY) and never exposed to the client.
- */
 import { Router, Request, Response } from "express";
 import axios from "axios";
 
@@ -27,11 +23,6 @@ function parseNum(value: string, name: string, min: number, max: number): number
   return n;
 }
 
-/**
- * GET /satellite/above/:lat/:lng/:alt/:radius/:category
- * Returns satellites currently above the given location (observer lat, lng, alt),
- * within the search radius (0–90 degrees), filtered by category (0 = all).
- */
 router.get("/above/:lat/:lng/:alt/:radius/:category", async (req: Request, res: Response) => {
   try {
     const { lat, lng, alt, radius, category } = req.params;

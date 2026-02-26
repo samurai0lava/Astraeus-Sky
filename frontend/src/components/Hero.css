@@ -163,7 +163,6 @@
     .hero {
         padding: 0 var(--space-xl);
         align-items: center;
-        /* Center on mobile? Or keep left? Design implies left. Let's keep left but maybe less padding */
     }
 
     .hero__moon-container {
