@@ -8,10 +8,10 @@ const Dashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
 
   const fetchDashboard = useCallback(
     async (signal = null, lat = null, lng = null) => {
-      setLoading(true);
       setError(null);
       try {
         let url = DASHBOARD_API;
@@ -30,8 +30,13 @@ const Dashboard = () => {
         setLoading(false);
       }
     },
-    [],
+    []
   );
+
+  // Refresh using last known coords (called by SatelliteMap every 5s)
+  const handleRefresh = useCallback(() => {
+    fetchDashboard(null, userCoords.lat, userCoords.lng);
+  }, [fetchDashboard, userCoords]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -39,12 +44,13 @@ const Dashboard = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          setUserCoords({ lat: latitude, lng: longitude });
           fetchDashboard(controller.signal, latitude, longitude);
         },
         () => {
           fetchDashboard(controller.signal);
         },
-        { enableHighAccuracy: true },
+        { enableHighAccuracy: true }
       );
     } else {
       fetchDashboard(controller.signal);
@@ -57,12 +63,11 @@ const Dashboard = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          setUserCoords({ lat: latitude, lng: longitude });
           fetchDashboard(null, latitude, longitude);
         },
-        () => {
-          fetchDashboard();
-        },
-        { enableHighAccuracy: true },
+        () => fetchDashboard(),
+        { enableHighAccuracy: true }
       );
     } else {
       fetchDashboard();
@@ -85,11 +90,7 @@ const Dashboard = () => {
       {error && (
         <div className="dashboard__error" role="alert">
           <p className="dashboard__error-message">{error}</p>
-          <button
-            type="button"
-            className="dashboard__retry"
-            onClick={handleRetry}
-          >
+          <button type="button" className="dashboard__retry" onClick={handleRetry}>
             Retry
           </button>
         </div>
@@ -97,11 +98,12 @@ const Dashboard = () => {
 
       {!loading && !error && data && (
         <div className="dashboard__content">
-
-          {data.above && data.above.length > 0 && (
-            <div className="dashboard__map">
-              <SatelliteMap satellites={data.above} />
-            </div>
+          {data.satellites && (
+            <SatelliteMap
+              user={data.user}
+              satellites={data.satellites}
+              onRefresh={handleRefresh} 
+            />
           )}
 
           {hasStats && (
@@ -121,9 +123,7 @@ const Dashboard = () => {
                 <article key={i} className="dashboard__card">
                   <h3 className="dashboard__card-title">{card.title}</h3>
                   {card.description && (
-                    <p className="dashboard__card-description">
-                      {card.description}
-                    </p>
+                    <p className="dashboard__card-description">{card.description}</p>
                   )}
                 </article>
               ))}
@@ -133,7 +133,6 @@ const Dashboard = () => {
           {!hasStats && !hasCards && !data.above && (
             <p className="dashboard__empty">No data available.</p>
           )}
-
         </div>
       )}
     </section>
