@@ -32,11 +32,24 @@ app.get("/api/dashboard", async (req, res) => {
       return res.status(400).json({ error: "Invalid lat/lng parameters" });
     }
 
-    // Fetch satellites above user location
-    const { data } = await axios.get(
-      `https://api.n2yo.com/rest/v1/satellite/above/${lat}/${lng}/${alt}/${radius}/${category}`,
-      { params: { apiKey: API_KEY } }
-    );
+    // Fetch satellites above user location (10s timeout, up to 2 retries)
+    let data: any;
+    const N2YO_TIMEOUT = 10_000;
+    const MAX_RETRIES = 2;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const response = await axios.get(
+          `https://api.n2yo.com/rest/v1/satellite/above/${lat}/${lng}/${alt}/${radius}/${category}`,
+          { params: { apiKey: API_KEY }, timeout: N2YO_TIMEOUT }
+        );
+        data = response.data;
+        break;
+      } catch (e: any) {
+        const retryable = e.code === 'ECONNRESET' || e.code === 'ECONNABORTED' || e.message?.includes('socket hang up');
+        if (!retryable || attempt === MAX_RETRIES) throw e;
+        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+      }
+    }
 
     // Transform satellites to clean shape
     const satellites = (data.above ?? []).map((sat: any) => ({
@@ -55,7 +68,7 @@ app.get("/api/dashboard", async (req, res) => {
     ];
 
     // Cards: first 5 satellites
-    const cards = satellites.slice(0, 5).map((sat) => ({
+    const cards = satellites.map((sat) => ({
       title: sat.name,
       description: `Altitude: ${sat.altitude} km | Azimuth: ${sat.azimuth}°`,
     }));

@@ -28,11 +28,15 @@ router.get("/above/:lat/:lng/:alt/:radius/:category", async (req: Request, res: 
     const { lat, lng, alt, radius, category } = req.params;
     const apiKey = getApiKey();
 
-    const observer_lat = parseNum(lat, "lat", -90, 90);
-    const observer_lng = parseNum(lng, "lng", -180, 180);
-    const observer_alt = parseNum(alt, "alt", 0, 100_000);
-    const search_radius = parseNum(radius, "radius", 0, 90);
-    const category_id = parseNum(category, "category", 0, 99);
+    if (!lat || !lng || !alt || !radius || !category) {
+      return res.status(400).json({ error: "Missing required parameters" });
+    }
+
+    const observer_lat = parseNum(String(lat), "lat", -90, 90);
+    const observer_lng = parseNum(String(lng), "lng", -180, 180);
+    const observer_alt = parseNum(String(alt), "alt", 0, 100_000);
+    const search_radius = parseNum(String(radius), "radius", 0, 90);
+    const category_id = parseNum(String(category), "category", 0, 99);
 
     const url = `${N2YO_BASE}/above/${observer_lat}/${observer_lng}/${observer_alt}/${search_radius}/${category_id}`;
     const { data } = await axios.get(url, {
