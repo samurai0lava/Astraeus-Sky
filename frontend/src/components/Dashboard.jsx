@@ -1,17 +1,23 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import "./Dashboard.css";
 import SatelliteMap from "../components/SatelliteMap";
 
 const DASHBOARD_API = "/api/dashboard";
+const PAGE_SIZE = 10;
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userCoords, setUserCoords] = useState({ lat: null, lng: null });
+  const [search, setSearch] = useState("");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const isFetching = useRef(false);
 
   const fetchDashboard = useCallback(
     async (signal = null, lat = null, lng = null) => {
+      if (isFetching.current) return;
+      isFetching.current = true;
       setError(null);
       try {
         let url = DASHBOARD_API;
@@ -28,12 +34,12 @@ const Dashboard = () => {
           setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
+        isFetching.current = false;
       }
     },
     []
   );
 
-  // Refresh using last known coords (called by SatelliteMap every 5s)
   const handleRefresh = useCallback(() => {
     fetchDashboard(null, userCoords.lat, userCoords.lng);
   }, [fetchDashboard, userCoords]);
@@ -77,6 +83,27 @@ const Dashboard = () => {
   const hasStats = Array.isArray(data?.stats) && data.stats.length > 0;
   const hasCards = Array.isArray(data?.cards) && data.cards.length > 0;
 
+  const filteredCards = useMemo(() => {
+    if (!hasCards) return [];
+    const q = search.trim().toLowerCase();
+    if (!q) return data.cards;
+    return data.cards.filter((card) =>
+      card.title.toLowerCase().includes(q)
+    );
+  }, [data, hasCards, search]);
+
+  const visibleCards = filteredCards.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredCards.length;
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + PAGE_SIZE);
+  };
+
   return (
     <section className="dashboard" aria-label="Dashboard">
       <h2 className="dashboard__title">Dashboard</h2>
@@ -118,15 +145,47 @@ const Dashboard = () => {
           )}
 
           {hasCards && (
-            <div className="dashboard__cards">
-              {data.cards.map((card, i) => (
-                <article key={i} className="dashboard__card">
-                  <h3 className="dashboard__card-title">{card.title}</h3>
-                  {card.description && (
-                    <p className="dashboard__card-description">{card.description}</p>
+            <div className="dashboard__cards-section">
+              <div className="dashboard__search-bar">
+                <input
+                  type="text"
+                  className="dashboard__search-input"
+                  placeholder="Search satellite by name…"
+                  value={search}
+                  onChange={handleSearchChange}
+                  aria-label="Search satellites"
+                />
+                <span className="dashboard__search-count">
+                  {filteredCards.length} / {data.cards.length} satellites
+                </span>
+              </div>
+
+              {filteredCards.length === 0 ? (
+                <p className="dashboard__empty">No satellites match &ldquo;{search}&rdquo;.</p>
+              ) : (
+                <>
+                  <div className="dashboard__cards">
+                    {visibleCards.map((card, i) => (
+                      <article key={i} className="dashboard__card">
+                        <h3 className="dashboard__card-title">{card.title}</h3>
+                        {card.description && (
+                          <p className="dashboard__card-description">{card.description}</p>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+
+                  {hasMore && (
+                    <button
+                      type="button"
+                      className="dashboard__load-more"
+                      onClick={handleLoadMore}
+                    >
+                      Load more ({filteredCards.length - visibleCount} remaining)
+                    </button>
                   )}
-                </article>
-              ))}
+                </>
+              )}
             </div>
           )}
 

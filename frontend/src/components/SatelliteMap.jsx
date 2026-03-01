@@ -32,7 +32,6 @@ function RecenterMap({ position }) {
 export default function SatelliteMap({ satellites, onRefresh }) {
   const [userLocation, setUserLocation] = useState(null);
 
-  // Geolocation on mount
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
@@ -40,12 +39,11 @@ export default function SatelliteMap({ satellites, onRefresh }) {
     );
   }, []);
 
-  // Auto-refresh every 5 seconds
   useEffect(() => {
     if (!onRefresh) return;
     const interval = setInterval(() => {
       onRefresh();
-    }, 5000);
+    }, 30000);
     return () => clearInterval(interval);
   }, [onRefresh]);
 
@@ -67,15 +65,11 @@ export default function SatelliteMap({ satellites, onRefresh }) {
       />
 
       <RecenterMap position={userLocation} />
-
-      {/* User location marker */}
       {userLocation && (
         <Marker position={userLocation} icon={userIcon}>
           <Popup>📍 Your Location</Popup>
         </Marker>
       )}
-
-      {/* Satellite markers with smooth drift animation */}
       {satellites.map((sat) => (
         <DriftMarker
           key={sat.id}

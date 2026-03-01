@@ -1,24 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Github, Satellite, Linkedin } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);
+    const lastScrollY = useRef(0);
+
+    useEffect(() => {
+        const onScroll = () => {
+            const currentY = window.scrollY;
+            const heroHeight = window.innerHeight;
+
+            if (currentY > heroHeight) {
+                // Past the hero — hide when scrolling down, show when scrolling up
+                setHidden(currentY > lastScrollY.current);
+            } else {
+                // Inside hero — always visible
+                setHidden(false);
+            }
+
+            lastScrollY.current = currentY;
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
     const navLinks = [
-        { label: 'Github', href: 'https://github.com/samurai0lava/Astraeus-Sky' },
+        { label: 'Github',   href: 'https://github.com/samurai0lava/Astraeus-Sky', icon: Github },
+        { label: 'N2YO API', href: 'https://www.n2yo.com/api/',                    icon: Satellite },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/samuel-lava/',     icon: Linkedin },
     ];
 
     return (
-        <nav className="navbar" role="navigation" aria-label="Main navigation">
+        <nav className={`navbar${hidden ? ' navbar--hidden' : ''}`} role="navigation" aria-label="Main navigation">
             <ul className="navbar__links">
-                {navLinks.map((link) => (
-                    <li key={link.label}>
-                        <a className="navbar__link" href={link.href}>
-                            {link.label}
+                {navLinks.map(({ label, href, icon: Icon }) => (
+                    <li key={label}>
+                        <a className="navbar__link" href={href}>
+                            <Icon size={30} strokeWidth={1.5} aria-hidden="true" />
+                            
                         </a>
                     </li>
                 ))}
@@ -37,20 +63,19 @@ const Navbar = () => {
             </button>
 
             <span className="navbar__logo"><img src="/src/assets/logo.png" alt="Astraeus Sky Logo" /></span>
-
-            {/* Mobile Menu */}
             <div
                 id="mobile-menu"
                 className={`navbar__mobile-menu ${isMenuOpen ? 'navbar__mobile-menu--open' : ''}`}
             >
-                {navLinks.map((link) => (
+                {navLinks.map(({ label, href, icon: Icon }) => (
                     <a
-                        key={link.label}
+                        key={label}
                         className="navbar__mobile-link"
-                        href={link.href}
+                        href={href}
                         onClick={() => setIsMenuOpen(false)}
                     >
-                        {link.label}
+                        <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
+                        {label}
                     </a>
                 ))}
             </div>
