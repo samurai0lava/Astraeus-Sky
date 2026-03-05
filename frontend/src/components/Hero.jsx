@@ -1,11 +1,9 @@
+import { Navigate, useNavigate } from 'react-router-dom';
 import './Hero.css';
-
 const Hero = () => {
-    const handleScrollClick = () => {
-        window.scrollTo({
-            top: window.innerHeight,
-            behavior: 'smooth'
-        });
+    const navigate = useNavigate();
+    const handleNavigation = () => {
+        navigate('/dashboard');
     };
 
     return (
@@ -35,11 +33,11 @@ const Hero = () => {
             </div>
 
             <button
-                className="hero__scroll-indicator"
-                onClick={handleScrollClick}
-                aria-label="Scroll to next section"
+                className="NavigationButton"
+                onClick={handleNavigation}            
+                aria-label="Redirect to the Dashboard section"
             >
-                <span className="hero__scroll-chevron" />
+                See what's Above
             </button>
         </section>
     );
