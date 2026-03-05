@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "deck.gl": "^9.2.10",
     "leaflet": "^1.9.4",
     "lucide": "^0.575.0",
     "lucide-react": "^0.575.0",
