@@ -33,6 +33,9 @@ const Navbar = () => {
       role="navigation"
       aria-label="Main navigation"
     >
+      <span className="navbar__logo" onClick={handleNavigation}>
+        <img src="/src/assets/logo.png" alt="Astraeus Sky Logo" />
+      </span>
       <ul className="navbar__links">
         {navLinks.map(({ label, href, icon: Icon }) => (
           <li key={label}>
@@ -55,9 +58,6 @@ const Navbar = () => {
         <span className="navbar__hamburger-line" />
       </button>
 
-      <span className="navbar__logo" onClick={handleNavigation}>
-        <img src="/src/assets/logo.png" alt="Astraeus Sky Logo" />
-      </span>
       <div
         id="mobile-menu"
         className={`navbar__mobile-menu ${isMenuOpen ? "navbar__mobile-menu--open" : ""}`}
