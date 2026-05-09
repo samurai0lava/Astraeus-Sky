@@ -22,8 +22,12 @@ app.get("/api/dashboard", async (req, res) => {
     const API_KEY = process.env.N2YO_API_KEY;
     if (!API_KEY) throw new Error("N2YO_API_KEY not set");
 
-    const lat = Number(req.query.lat);
-    const lng = Number(req.query.lng);
+    const rawLat = req.query.lat;
+    const rawLng = req.query.lng;
+    // If geolocation is blocked/denied in the browser, the frontend calls this
+    // endpoint without coords. Default to (0,0) so the dashboard still loads.
+    const lat = rawLat == null ? 0 : Number(rawLat);
+    const lng = rawLng == null ? 0 : Number(rawLng);
     const alt = 0;       // user altitude in meters
     const radius = 90;   // search radius in km
     const category = 0;  // all satellites

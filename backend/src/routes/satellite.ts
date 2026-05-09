@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import axios from "axios";
 
 const router = Router();
-const N2YO_BASE = "https://api.n2yo.com/rest/v1/satellite";
+const N2YO_BASE = process.env.N2YO_BASE_URL;
 
 function getApiKey(): string {
   const key = process.env.N2YO_API_KEY;
