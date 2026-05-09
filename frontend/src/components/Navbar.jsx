@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Github, Satellite, Linkedin } from "lucide-react";
 import "./Navbar.css";
+import logo from "../assets/logo.png";
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -34,7 +35,7 @@ const Navbar = () => {
       aria-label="Main navigation"
     >
       <span className="navbar__logo" onClick={handleNavigation}>
-        <img src="/src/assets/logo.png" alt="Astraeus Sky Logo" />
+        <img src={logo} alt="Astraeus Sky Logo" />
       </span>
       <ul className="navbar__links">
         {navLinks.map(({ label, href, icon: Icon }) => (
