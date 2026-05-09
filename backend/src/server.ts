@@ -4,6 +4,15 @@ import cors from "cors";
 import axios from "axios";
 import satelliteRoutes from "./routes/satellite";
 
+type DashboardSatellite = {
+  id: number;
+  name: string;
+  lat: number;
+  lng: number;
+  altitude: number;
+  azimuth: number;
+};
+
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
@@ -56,13 +65,14 @@ app.get("/api/dashboard", async (req, res) => {
     }
 
     // Transform satellites to clean shape
-    const satellites = (data.above ?? []).map((sat: any) => ({
-      id: sat.satid,
-      name: sat.satname,
-      lat: sat.satlat,
-      lng: sat.satlng,
-      altitude: sat.satalt,
-      azimuth: sat.satazim,
+    const above: any[] = Array.isArray((data as any)?.above) ? (data as any).above : [];
+    const satellites: DashboardSatellite[] = above.map((sat) => ({
+      id: Number(sat.satid),
+      name: String(sat.satname),
+      lat: Number(sat.satlat),
+      lng: Number(sat.satlng),
+      altitude: Number(sat.satalt),
+      azimuth: Number(sat.satazim),
     }));
 
     // Stats for dashboard
